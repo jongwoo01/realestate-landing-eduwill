@@ -1,5 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, Phone, MessageSquare, ArrowLeft } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "상담 신청 완료",
+  description: "종우부동산중개사무소 상담 신청 완료 안내 페이지입니다.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function SuccessPage() {
   return (

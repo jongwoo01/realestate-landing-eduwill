@@ -1,9 +1,96 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, ShieldCheck, Home, Key, Wallet, HelpCircle, ChevronRight, BarChart3, Users } from "lucide-react";
+import { absoluteUrl, siteConfig } from "./lib/site";
+
+export const metadata: Metadata = {
+  title: "마포구 부동산 매도·전세·월세 상담",
+  description:
+    "성산동, 망원동, 연남동 집주인을 위한 부동산 매도, 전세, 월세 상담. 이종우 대표 공인중개사가 상담부터 계약까지 직접 챙깁니다.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "마포구 부동산 매도·전세·월세 상담",
+    description:
+      "성산동, 망원동, 연남동 집주인을 위한 부동산 매도, 전세, 월세 상담.",
+    url: "/",
+  },
+};
+
+const faqItems = [
+  {
+    q: "아직 매도할지 결정 못 했는데 상담만 받아도 되나요?",
+    a: "물론입니다. 마포구 집주인 입장에서 부담 없는 상담과 꼼꼼한 진행을 도와드립니다.",
+  },
+  {
+    q: "어떤 지역을 주로 상담하나요?",
+    a: "마포구 성산동, 망원동, 연남동의 아파트, 오피스텔, 빌라 상담을 중심으로 진행합니다.",
+  },
+  {
+    q: "카카오톡으로도 문의할 수 있나요?",
+    a: "카카오톡 채널에서 '종우부동산 상담센터'를 검색해 문의하실 수 있습니다.",
+  },
+];
 
 export default function HomePage() {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      "@id": absoluteUrl("/#real-estate-agent"),
+      name: siteConfig.name,
+      url: siteConfig.url,
+      telephone: siteConfig.phone,
+      founder: {
+        "@type": "Person",
+        name: siteConfig.owner,
+        jobTitle: "대표 공인중개사",
+      },
+      areaServed: siteConfig.areas.map((area) => ({
+        "@type": "AdministrativeArea",
+        name: area,
+      })),
+      knowsAbout: siteConfig.services,
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: siteConfig.phone,
+        contactType: "부동산 상담",
+        areaServed: "KR",
+        availableLanguage: ["ko"],
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": absoluteUrl("/#website"),
+      name: siteConfig.name,
+      url: siteConfig.url,
+      inLanguage: "ko-KR",
+      publisher: {
+        "@id": absoluteUrl("/#real-estate-agent"),
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.a,
+        },
+      })),
+    },
+  ];
+
   return (
     <div className="flex flex-col w-full">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <section className="relative w-full py-24 md:py-32 lg:py-40 flex items-center justify-center overflow-hidden bg-primary">
         <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1560518883-ce09059eeefa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center"></div>
@@ -189,11 +276,7 @@ export default function HomePage() {
           </div>
           
           <div className="space-y-4">
-            {[
-              { q: "아직 매도할지 결정 못 했는데 상담만 받아도 되나요?", a: "물론입니다. 마포구 집주인 입장에서 부담 없는 상담과 꼼꼼한 진행을 도와드립니다." },
-              { q: "어떤 지역을 주로 상담하나요?", a: "마포구 성산동, 망원동, 연남동의 아파트, 오피스텔, 빌라 상담을 중심으로 진행합니다." },
-              { q: "카카오톡으로도 문의할 수 있나요?", a: "카카오톡 채널에서 '종우부동산 상담센터'를 검색해 문의하실 수 있습니다." }
-            ].map((faq, idx) => (
+            {faqItems.map((faq, idx) => (
               <details key={idx} className="group bg-white rounded-xl border border-gray-200 [&_summary::-webkit-details-marker]:hidden">
                 <summary className="flex items-center justify-between p-6 cursor-pointer font-bold text-primary">
                   <span className="flex items-center gap-3">
